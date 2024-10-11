@@ -1,11 +1,14 @@
 My groupmembers are:
-- Matthew Gilber
+- Matthew Gilbert
 - Ricky Williams
 - Ryan Pierce
 - Dave Duncan
 - Logan Tucker
 - Aaron Alexander
 - Abhinav Prathipati
+
+
+
 ------------------ Fill in some information about your project under this ------------------
   The project will create a mental health app using java. This app will use a java swing gui to interface with
 the user. The mental health app will allow the user to create an account that is protected with a
