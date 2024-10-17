@@ -5,7 +5,7 @@ Groupmembers are:
 - Logan Tucker
 - Aaron Alexander
 - Abhinav Prathipati
-- - Matthew Gilbert
+-  Matthew Gilbert
 
 
 
