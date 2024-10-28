@@ -295,8 +295,8 @@ public class MentalHealthApp {
                     moodMessageLabel.setText("Please enter a number between 1 and 10.");
                 } else {
                     saveMoodData(moodRating, moodDescription);
-                    JOptionPane.showMessageDialog(frame, "Mood submitted! App will close now.");
-                    frame.dispose();
+                    JOptionPane.showMessageDialog(frame, "Mood submitted!");
+                    
                 }
             } catch (NumberFormatException ex) {
                 moodMessageLabel.setText("Please enter a valid number.");
