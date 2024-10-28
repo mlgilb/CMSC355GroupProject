@@ -252,6 +252,17 @@ public class MentalHealthApp {
             }
         }
     }
+	// creates new txt file when new user is registered
+	private void createUserMoodFile(String username) {
+    String moodFileName = username + "_mood.txt";
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(moodFileName))) {
+			writer.newLine();
+		} catch (IOException e) {
+			System.out.println("Error creating mood file for " + username + ": " + e.getMessage());
+		}
+	}
+
+	
 
     private class RegisterAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
@@ -268,6 +279,7 @@ public class MentalHealthApp {
                 saveUserData();
                 JOptionPane.showMessageDialog(frame, "Account created successfully!");
                 showLoginPanel();
+				createUserMoodFile(newUsername);
             }
         }
     }
