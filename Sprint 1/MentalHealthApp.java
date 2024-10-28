@@ -220,8 +220,10 @@ public class MentalHealthApp {
             if (moodExistsForToday) {
                 int confirm = JOptionPane.showConfirmDialog(frame, "You've already submitted a mood today. Submitting a new mood will overwrite the previous one. Continue?", "Warning", JOptionPane.YES_NO_OPTION);
                 if (confirm != JOptionPane.YES_OPTION) {
-                    return;
+					JOptionPane.showMessageDialog(frame, "Mood will no be submitted!");
+					return;
                 }
+			
             }
 
             // save updated mood data
@@ -293,9 +295,10 @@ public class MentalHealthApp {
                 int moodRating = Integer.parseInt(moodInput);
                 if (moodRating < 1 || moodRating > 10) {
                     moodMessageLabel.setText("Please enter a number between 1 and 10.");
-                } else {
+                }
+				else {
                     saveMoodData(moodRating, moodDescription);
-                    JOptionPane.showMessageDialog(frame, "Mood submitted!");
+                    JOptionPane.showMessageDialog(frame, "Success!");
                     
                 }
             } catch (NumberFormatException ex) {
