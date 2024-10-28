@@ -1,5 +1,5 @@
 Groupmembers are:
-- Ricky Williams3jirher
+- Ricky Williams
 - Ryan Pierce
 - Dave Duncan
 - Logan Tucker
