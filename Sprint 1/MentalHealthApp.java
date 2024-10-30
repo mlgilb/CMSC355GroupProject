@@ -6,8 +6,12 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * MentalHealthApp is a Java Swing application that allows users to register, log in,
+ * submit their mood ratings, and view their mood history.
+ */
 public class MentalHealthApp {
-    // main frame and panels
+    // Main frame and panels
     private JFrame frame;
     private JPanel loginPanel, registerPanel, moodPanel, historyPanel;
     private JTextField usernameField, regUsernameField, moodField;
@@ -18,110 +22,107 @@ public class MentalHealthApp {
     private String loggedInUser;
     private static final String DATA_FILE = "user_data.txt";
 
+    /**
+     * Constructor for MentalHealthApp.
+     * Initializes the user database and sets up the main UI.
+     */
     public MentalHealthApp() {
         userDatabase = new HashMap<>();
-        loadUserData(); // load user info from file
-        initUI(); // set up the main UI
+        loadUserData(); // Load user info from file
+        initUI(); // Set up the main UI
     }
 
+    /**
+     * Initializes the main UI of the application.
+     * Sets up the main frame and displays the login panel.
+     */
     private void initUI() {
-        // setting up the main app window
         frame = new JFrame("Mental Health App");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
 
-        showLoginPanel(); // show login first
+        showLoginPanel(); // Show login first
 
-        frame.setVisible(true); // make it show up
+        frame.setVisible(true); // Make it show up
     }
 
+    /**
+     * Displays the login panel where users can enter their username and password.
+     */
     private void showLoginPanel() {
-        // creating login screen
-        loginPanel = new JPanel();
-        loginPanel.setLayout(new GridLayout(4, 2));
+        loginPanel = new JPanel(new GridLayout(4, 2));
 
-        // username input
         loginPanel.add(new JLabel("Username:"));
         usernameField = new JTextField();
         loginPanel.add(usernameField);
 
-        // password input
         loginPanel.add(new JLabel("Password:"));
         passwordField = new JPasswordField();
         loginPanel.add(passwordField);
 
-        // login button
         JButton loginButton = new JButton("Login");
         loginButton.addActionListener(new LoginAction());
         loginPanel.add(loginButton);
 
-        // register button
         JButton registerButton = new JButton("Register");
         registerButton.addActionListener(e -> showRegisterPanel());
         loginPanel.add(registerButton);
 
-        messageLabel = new JLabel(); // label for error/success messages
+        messageLabel = new JLabel(); // Label for error/success messages
         loginPanel.add(messageLabel);
 
-        frame.setContentPane(loginPanel); // set login panel as main view
+        frame.setContentPane(loginPanel); // Set login panel as main view
         frame.revalidate();
     }
 
+    /**
+     * Displays the registration panel where new users can create an account.
+     */
     private void showRegisterPanel() {
-        // registration panel setup
-        registerPanel = new JPanel();
-        registerPanel.setLayout(new GridLayout(4, 2));
+        registerPanel = new JPanel(new GridLayout(4, 2));
 
-        // username for registration
         registerPanel.add(new JLabel("New Username:"));
         regUsernameField = new JTextField();
         registerPanel.add(regUsernameField);
 
-        // password for registration
         registerPanel.add(new JLabel("New Password:"));
         regPasswordField = new JPasswordField();
         registerPanel.add(regPasswordField);
 
-        // create account button
         JButton createAccountButton = new JButton("Create Account");
         createAccountButton.addActionListener(new RegisterAction());
         registerPanel.add(createAccountButton);
 
-        // back button to return to login
         JButton backButton = new JButton("Back to Login");
         backButton.addActionListener(e -> showLoginPanel());
         registerPanel.add(backButton);
 
-        frame.setContentPane(registerPanel); // switch to register view
+        frame.setContentPane(registerPanel); // Switch to register view
         frame.revalidate();
     }
 
+    /**
+     * Displays the mood panel where users can submit their mood ratings and descriptions.
+     */
     private void showMoodPanel() {
-        // mood input panel setup
-        moodPanel = new JPanel();
-        moodPanel.setLayout(new GridLayout(5, 2));
+        moodPanel = new JPanel(new GridLayout(5, 2));
 
-        // mood rating input
         moodPanel.add(new JLabel("How are you feeling today? (1-10):"));
         moodField = new JTextField();
         moodPanel.add(moodField);
 
-        // mood description input
         moodPanel.add(new JLabel("Why do you feel this way?"));
         moodDescriptionField = new JTextArea(3, 20);
         moodPanel.add(new JScrollPane(moodDescriptionField));
 
-        // submit mood button
         JButton submitMoodButton = new JButton("Submit Mood");
         submitMoodButton.addActionListener(new SubmitMoodAction());
         moodPanel.add(submitMoodButton);
 
-        // view mood history button
         JButton viewHistoryButton = new JButton("View Mood History");
         viewHistoryButton.addActionListener(e -> showHistoryPanel());
         moodPanel.add(viewHistoryButton);
 
-        // make logout button
         JButton logoutButton = new JButton("Logout");
         logoutButton.addActionListener(e -> {
             loggedInUser = null;
@@ -129,34 +130,37 @@ public class MentalHealthApp {
         });
         moodPanel.add(logoutButton);
 
-        moodMessageLabel = new JLabel(); // for feedback messages
+        moodMessageLabel = new JLabel(); // For feedback messages
         moodPanel.add(moodMessageLabel);
 
-        frame.setContentPane(moodPanel); // show mood panel
+        frame.setContentPane(moodPanel); // Show mood panel
         frame.revalidate();
     }
 
+    /**
+     * Displays the history panel where users can view their mood history.
+     */
     private void showHistoryPanel() {
-        // history view panel setup
-        historyPanel = new JPanel();
-        historyPanel.setLayout(new BorderLayout());
+        historyPanel = new JPanel(new BorderLayout());
 
         moodHistoryArea = new JTextArea();
         moodHistoryArea.setEditable(false);
-        loadMoodHistory(); // load and display history
+        loadMoodHistory(); // Load and display history
 
         historyPanel.add(new JScrollPane(moodHistoryArea), BorderLayout.CENTER);
 
         JButton backButton = new JButton("Back");
-        backButton.addActionListener(e -> showMoodPanel()); // go back to mood panel
+        backButton.addActionListener(e -> showMoodPanel()); // Go back to mood panel
         historyPanel.add(backButton, BorderLayout.SOUTH);
 
-        frame.setContentPane(historyPanel); // show history panel
+        frame.setContentPane(historyPanel); // Show history panel
         frame.revalidate();
     }
 
+    /**
+     * Loads user credentials from a file into the user database.
+     */
     private void loadUserData() {
-        // load user credentials from file
         try (BufferedReader reader = new BufferedReader(new FileReader(DATA_FILE))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -170,8 +174,10 @@ public class MentalHealthApp {
         }
     }
 
+    /**
+     * Saves user credentials from the user database to a file.
+     */
     private void saveUserData() {
-        // save user data to file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(DATA_FILE))) {
             for (Map.Entry<String, String> entry : userDatabase.entrySet()) {
                 writer.write(entry.getKey() + ":" + entry.getValue());
@@ -182,8 +188,10 @@ public class MentalHealthApp {
         }
     }
 
+    /**
+     * Loads the mood history for the logged-in user from a file.
+     */
     private void loadMoodHistory() {
-        // load mood history for the logged-in user
         moodHistoryArea.setText("");
         String filename = loggedInUser + "_mood.txt";
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -196,13 +204,17 @@ public class MentalHealthApp {
         }
     }
 
+    /**
+     * Saves or updates the mood data for the logged-in user.
+     * 
+     * @param moodRating The mood rating (1-10).
+     * @param description The description of the mood.
+     */
     private void saveMoodData(int moodRating, String description) {
-        // save or update today's mood data
         String today = java.time.LocalDate.now().toString();
         String filename = loggedInUser + "_mood.txt";
 
         try {
-            // check if mood for today already exists
             StringBuilder history = new StringBuilder();
             boolean moodExistsForToday = false;
             try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -216,17 +228,14 @@ public class MentalHealthApp {
                 }
             }
 
-            // ask user if they want to overwrite today's mood
             if (moodExistsForToday) {
                 int confirm = JOptionPane.showConfirmDialog(frame, "You've already submitted a mood today. Submitting a new mood will overwrite the previous one. Continue?", "Warning", JOptionPane.YES_NO_OPTION);
                 if (confirm != JOptionPane.YES_OPTION) {
-					JOptionPane.showMessageDialog(frame, "Mood will no be submitted!");
-					return;
+                    JOptionPane.showMessageDialog(frame, "Mood will not be submitted!");
+                    return;
                 }
-			
             }
 
-            // save updated mood data
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
                 writer.write(history.toString());
                 writer.write("Date: " + today + ", Mood: " + moodRating + ", Reason: " + description + "\n");
@@ -236,10 +245,12 @@ public class MentalHealthApp {
         }
     }
 
-    // Action listener classes
+    /**
+     * Action listener for the login button.
+     * Handles the login logic.
+     */
     private class LoginAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            // login logic
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
 
@@ -254,25 +265,31 @@ public class MentalHealthApp {
             }
         }
     }
-	// creates new txt file when new user is registered
-	private void createUserMoodFile(String username) {
-    String moodFileName = username + "_mood.txt";
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(moodFileName))) {
-			writer.newLine();
-		} catch (IOException e) {
-			System.out.println("Error creating mood file for " + username + ": " + e.getMessage());
-		}
-	}
 
-	
+    /**
+     * Creates a new mood file for a newly registered user.
+     * 
+     * @param username The username of the new user.
+     */
+    private void createUserMoodFile(String username) {
+        String moodFileName = username + "_mood.txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(moodFileName))) {
+            writer.newLine();
+        } catch (IOException e) {
+            System.out.println("Error creating mood file for " + username + ": " + e.getMessage());
+        }
+    }
 
+    /**
+     * Action listener for the create account button.
+     * Handles the registration logic.
+     */
     private class RegisterAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            // registration logic
             String newUsername = regUsernameField.getText();
             String newPassword = new String(regPasswordField.getPassword());
 
-            if (newUsername.length() < 5 || newPassword.length() < 5 ) {
+            if (newUsername.length() < 5 || newPassword.length() < 5) {
                 JOptionPane.showMessageDialog(frame, "Username and password must be at least 5 characters.");
             } else if (userDatabase.containsKey(newUsername)) {
                 JOptionPane.showMessageDialog(frame, "Username already taken.");
@@ -281,25 +298,26 @@ public class MentalHealthApp {
                 saveUserData();
                 JOptionPane.showMessageDialog(frame, "Account created successfully!");
                 showLoginPanel();
-				createUserMoodFile(newUsername);
+                createUserMoodFile(newUsername);
             }
         }
     }
 
+    /**
+     * Action listener for the submit mood button.
+     * Handles the mood submission logic.
+     */
     private class SubmitMoodAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            // mood submission logic
             String moodInput = moodField.getText();
             String moodDescription = moodDescriptionField.getText();
             try {
                 int moodRating = Integer.parseInt(moodInput);
                 if (moodRating < 1 || moodRating > 10) {
                     moodMessageLabel.setText("Please enter a number between 1 and 10.");
-                }
-				else {
+                } else {
                     saveMoodData(moodRating, moodDescription);
                     JOptionPane.showMessageDialog(frame, "Success!");
-                    
                 }
             } catch (NumberFormatException ex) {
                 moodMessageLabel.setText("Please enter a valid number.");
@@ -307,6 +325,11 @@ public class MentalHealthApp {
         }
     }
 
+    /**
+     * Main method to launch the application.
+     * 
+     * @param args Command line arguments.
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(MentalHealthApp::new);
     }
